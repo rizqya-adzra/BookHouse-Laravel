@@ -11,10 +11,8 @@
         <img src="https://cdn0.iconfinder.com/data/icons/business-management-109/64/customer-consumer-Business-question-512.png" class="d-block m-auto" width="300">
         <h4 class="text-center">Anda tidak diizinkan mengakses halaman ini!</h4>
         <div class="d-block m-auto">
-            @if (Auth::user()->role == 'admin')
+            @if (Auth::check())
               <a href="{{ route('landing-page') }}" class="btn btn-info mt-3">Kembali</a>
-            @elseif (Auth::user()->role == 'pelanggan')
-              <a href="{{ route('pelanggan.welcome') }}" class="btn btn-info mt-3">Balik</a>
             @endif
         </div>
     </div>

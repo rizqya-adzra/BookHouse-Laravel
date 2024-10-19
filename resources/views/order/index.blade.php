@@ -20,7 +20,6 @@
                         <th>Buku</th>
                         <th>Tanggal Pembelian</th>
                         <th>Aksi</th>
-
                     </tr>
                 </thead>
                 <tbody>

@@ -1,13 +1,13 @@
 @extends('templates.app', ['title' => 'Login Akun'])
 
 @section('dynamic-contents')
-    <div class="d-flex justify-content-center mt-5 m-auto" style="box-shadow: 1px 1px 20px 0px rgb(158, 164, 207); max-width: 800px">
-        <div class="p-5 text-white" style=" background-color: #836FFF; max-width: 300px">
+    <div class="d-flex justify-content-center" style="box-shadow: 1px 1px 20px 0px rgb(158, 164, 207); max-width: 800px; margin:auto; margin-top:80px">
+        <div class="card p-5 text-white" style=" background-color: #836FFF; max-width: 310px">
             <h1>Welcome! To <span class="text-warning">Qya's BookHouse</span></h1>
             <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Molestiae ratione consequatur vero 
                 reiciendis saepe fuga voluptatum consequuntur, ipsum iusto id dolor reprehenderit explicabo.</p>
         </div>
-        <form class=" p-5" action="{{ route('login.auth') }}" method="POST" style="width: 700px">
+        <form class="card p-5" action="{{ route('login.auth') }}" method="POST" style="width: 700px; background-color: white">
             <h1 class="text-center mb-4">Login</h1>
             @csrf
             @if (Session::get('failed'))
@@ -40,7 +40,7 @@
                     <small class="text-danger"> Pastikan Password anda benar! </small>
                 @enderror
             </div>
-            <button type="submit" class="btn btn-primary mt-3">Login</button>
+            <button type="submit" class="btn mt-3 mb-4" style="background-color: #836FFF; color:white">Login</button>
         </form>
     </div>
 @endsection

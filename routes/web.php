@@ -26,16 +26,16 @@ use App\Http\Controllers\MailController;
         Route::post('/login', [UserController::class, 'loginAuth'])->name('login.auth');
     });
 
-    Route::get('/logout', [UserController::class, 'logout'])->name('logout');
-
+    
     Route::get('/error-permission', function () {
         return view('errors.permission');
     })->name('errors.permission');
-
+    
     Route::middleware(['IsLogin'])->group(function() {
         Route::get('/home', function() {
             return view('landing-page');
         })->name('landing-page');
+        Route::get('/logout', [UserController::class, 'logout'])->name('logout');
     });
 
     Route::middleware(['IsLogin', 'IsAdmin'])->group(function () {
@@ -65,6 +65,7 @@ use App\Http\Controllers\MailController;
                 Route::post('/store', [OrderController::class, 'store'])->name('store');
                 Route::get('/print/{id}', [OrderController::class, 'show'])->name('print');
                 Route::get('/download/{id}', [OrderController::class, 'downloadPDF'])->name('download');
+                Route::get('/data', [OrderController::class, 'data'])->name('data');
             });
             Route::prefix('/contact')->name('contact.')->group(function(){
                 Route::get('/', [MailController::class, 'index'])->name('index');

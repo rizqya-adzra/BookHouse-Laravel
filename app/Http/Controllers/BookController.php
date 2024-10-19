@@ -13,7 +13,7 @@ class BookController extends Controller
      */
     public function index(Request $request)
     {
-        $books = Book::where('name', 'LIKE', '%'.$request->search.'%')->orderBy('stock', 'ASC')->simplePaginate(5);
+        $books = Book::where('name', 'LIKE', '%'.$request->search.'%')->orderBy('name', 'ASC')->simplePaginate(5);
         return view('book.index', compact('books'));
     }
 
@@ -113,7 +113,13 @@ class BookController extends Controller
         ]
     );
 
-        $proses = Book::where('id', $id)->update([
+        $booksBefore = Book::where('id', $id)->first();
+        if ((int)$request->stock < (int)
+        $booksBefore->stock) {
+            return redirect()->back()->with('failed', 'Stok baru tidak boleh kurang dari stok sebelumnya!');
+        }
+
+        $proses = $booksBefore->update([
             'name' => $request->name,
             'type' => $request->type,
             'author' => $request->author,
@@ -148,6 +154,6 @@ class BookController extends Controller
         $books = Book::all()->toArray();
         view()->share('books', $books);
         $pdf = PDF::loadView('book.print', $books);
-        return $pdf->download('receipt.pdf');   
+        return $pdf->download('databuku.pdf');   
     }
 }

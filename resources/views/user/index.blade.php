@@ -9,7 +9,7 @@
                 <form class="d-flex" role="search" action=" {{ 'accounts' }} " method="GET">
                     <input class="form-control me-2" type="search" placeholder="Search" name="search"
                     aria-label="Search">
-                    <button class="btn btn-outline-success" type="submit">Search</button>
+                    <button class="btn btn-outline-success" type="submit"><i class="fa fa-search" aria-hidden="true"></i></button>
                 </form>
             </div>
         </div>
@@ -29,9 +29,9 @@
                 {{ Session::get('delete') }}
             </div>
         @endif
-        <div>
-            <table class="table table-bordered table table-dark table-striped text-center">
-                <thead>
+        <div class="card mb-4" style="box-shadow: 0px 1px 0px 1px rgb(182, 232, 210)">
+            <table  class="table table-striped text-center table-borderless table-lebar m-auto">
+                <thead class="table-success">
                     <tr>
                         <th>No</th>
                         <th>Nama</th>
@@ -47,11 +47,11 @@
                                 <td> {{ ($users->currentPage() - 1) * $users->perPage() + ($index + 1) }} </td>
                                 <td> {{ $item['name'] }} </td>
                                 <td> {{ $item['email'] }} </td>
-                                <td> {{ $item['role'] }} </td>
+                                <td class=" {{ $item['role'] == 'admin' ? 'table-primary' : 'table-warning' }}"> {{ $item['role'] }} </td>
                                 <td>
-                                    <a class="btn btn-warning" href="{{ route('accounts.edit', ['id' => $item->id]) }}">Edit</a>
+                                    <a class="btn btn-warning" href="{{ route('accounts.edit', ['id' => $item->id]) }}"><i class="fa fa-pencil fa-1x" aria-hidden="true"></i></a>
                                     <a class="btn btn-danger"
-                                    onclick="showModal( '{{ $item->id }}', '{{ $item->email }}')">Hapus</a>
+                                    onclick="showModal( '{{ $item->id }}', '{{ $item->email }}')"><i class="fa fa-trash fa-1x" aria-hidden="true"></i></a>
                                 </td>
                             </tr>
                         @endforeach
@@ -92,7 +92,6 @@
             </div>
             <div>
                 <button class="btn btn-danger">📃Export ke PDF</button>
-                <button class="btn btn-success">📃Export ke Excel</button>
             </div>
         </div>
     </section>

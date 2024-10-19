@@ -1,0 +1,17 @@
+.table-lebar {
+    height: 400px; 
+    border-radius: 100px;
+  }
+
+.warna {
+  border:1px solid #836FFF;
+}
+
+.btn-warna {
+  background-color: #836FFF;
+}
+
+.text-warna {
+ color: #836FFF;
+}
+

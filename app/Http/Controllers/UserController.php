@@ -15,7 +15,7 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-        $users = User::where('name', 'LIKE', '%' . $request->search . '%')->simplePaginate(5);
+        $users = User::where('email', 'LIKE', '%' . $request->search . '%')->simplePaginate(5);
         return view('user.index', compact('users'));
     }
 
@@ -89,13 +89,12 @@ class UserController extends Controller
                     'name' => 'required',
                     'email' => 'required',
                     'role' => 'required',
-                    'password' => 'required|min: 6',
+                    'password' => 'nullable',
                 ],
                 [
                     'name.required' => 'Nama Wajib Diisi!',
                     'email.required' => 'Email Wajib Diisi!',
                     'role.required' => 'Role Pengguna Wajib Diisi!',
-                    'password.required' => 'Password Wajib Diisi!',
                     'min.required' => 'Password Minimal 6 Karakter!',
                 ]
             );
@@ -140,7 +139,7 @@ class UserController extends Controller
 
         $proses = $request->only(['name', 'email', 'password']); 
         if (Auth::attempt($proses)) {
-            return redirect()->route('welcome');
+            return redirect()->route('landing-page');
         } else {
             return redirect()->back()->with('failed', 'Login gagal, silahkan coba lagi');
         }

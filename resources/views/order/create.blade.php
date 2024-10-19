@@ -34,7 +34,7 @@
                     <select name="books[]" id="books" class="form-select">
                         <option selected hidden option>Pembelian 1</option>
                         @foreach ($books as $index => $items)
-                            <option value="{{ $items['id'] }}"> {{ $items['name'] }} </option>
+                            <option value="{{ $items['id'] }}"> {{ $items['name'] }} = Rp.{{number_format( $items['price'], 2, ',', '.')}} </option>
                         @endforeach
                     </select>
                     <div id="wrap-books"></div>
@@ -60,7 +60,7 @@
             let el = `<br><select name="books[]" id="books" class="form-select">
                         <option selected hidden option>Pembelian ${no}</option>
                         @foreach ($books as $index => $items)
-                            <option value="{{ $items['id'] }}"> {{ $items['name'] }} </option>
+                            <option value="{{ $items['id'] }}"> {{ $items['name'] }} = {{$items['price']}}</option>
                         @endforeach
                     </select>`
 
