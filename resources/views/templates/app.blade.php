@@ -21,7 +21,7 @@
     <title> {{ $title }} </title>
 </head>
 
-<body style="background-color: #eaeff0">
+<body style="background-color: #f4f6f9;">
 @if (Auth::check())
     <nav class="navbar d-flex justify-content-around" style="background-color: white; box-shadow: 0px 3px 0px 0px #836FFF">
         <div>
@@ -34,6 +34,10 @@
                     href="{{ route('landing-page') }}">Home</a>
                 </li>
                 @if (Auth::user()->role == 'admin')
+                <li class="nav-item">
+                    <a class="nav-link {{ Route::is('admin.data') ? 'active' : '' }}"
+                    href="{{ route('admin.data') }}">Pembelian</a>
+                </li>
                 <li class="nav-item">
                     <a class="nav-link {{ Route::is('books') ? 'active' : '' }}"
                     href="{{ route('books') }}">Data Buku</a>

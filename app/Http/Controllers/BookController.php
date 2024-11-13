@@ -156,4 +156,5 @@ class BookController extends Controller
         $pdf = PDF::loadView('book.print', $books);
         return $pdf->download('databuku.pdf');   
     }
+
 }

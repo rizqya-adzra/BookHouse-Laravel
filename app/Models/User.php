@@ -24,6 +24,12 @@ class User extends Authenticatable
         'password',
     ];
 
+    
+    public function order()
+    {
+        return $this->belongsTo(Order::class);
+    }
+
     /**
      * The attributes that should be hidden for serialization.
      *

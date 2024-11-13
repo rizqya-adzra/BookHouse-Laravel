@@ -6,6 +6,7 @@ use App\Http\Controllers\BookController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\MailController;
+use App\Http\Middleware\IsPelanggan;
 
 /*
 |--------------------------------------------------------------------------
@@ -47,7 +48,8 @@ use App\Http\Controllers\MailController;
         Route::get('/books/edit/{id}', [BookController::class, 'edit'])->name('books.edit');
         Route::patch('/books/edit/{id}', [BookController::class, 'update'])->name('books.edit.update');
         Route::get('/books/download', [BookController::class, 'downloadPDF'])->name('books.download');
-
+        Route::get('/books/data', [BookController::class, 'data'])->name('books.data');
+        
         //akun
         Route::get('/accounts', [UserController::class, 'index'])->name('accounts');
         Route::get('/accounts/add', [UserController::class, 'create'])->name('accounts.add');
@@ -55,8 +57,11 @@ use App\Http\Controllers\MailController;
         Route::get('/accounts/edit/{id}', [UserController::class, 'edit'])->name('accounts.edit');
         Route::patch('/accounts/edit/{id}', [UserController::class, 'update'])->name('accounts.edit.update');
         Route::delete('/accounts/delete/{id}', [UserController::class, 'destroy'])->name('accounts.delete');
-    });
 
+        Route::get('data', [OrderController::class, 'data'])->name('admin.data');
+        Route::get('export/excel', [OrderController::class, 'exportExcel'])->name('export-excel');
+    });
+    
     Route::middleware(['IsLogin', 'IsPelanggan'])->group(function () {
         Route::prefix('/pelanggan')->name('pelanggan.')->group(function() {
             Route::prefix('/order')->name('order.')->group(function(){
@@ -65,7 +70,6 @@ use App\Http\Controllers\MailController;
                 Route::post('/store', [OrderController::class, 'store'])->name('store');
                 Route::get('/print/{id}', [OrderController::class, 'show'])->name('print');
                 Route::get('/download/{id}', [OrderController::class, 'downloadPDF'])->name('download');
-                Route::get('/data', [OrderController::class, 'data'])->name('data');
             });
             Route::prefix('/contact')->name('contact.')->group(function(){
                 Route::get('/', [MailController::class, 'index'])->name('index');
@@ -73,6 +77,7 @@ use App\Http\Controllers\MailController;
             Route::get('/welcome', function () {
                 return view('welcome');
             })->name('welcome');
-
+            
         });
     });
+    

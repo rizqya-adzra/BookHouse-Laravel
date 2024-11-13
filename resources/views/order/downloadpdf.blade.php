@@ -1,166 +1,188 @@
-<!DOCTYPE html>
 <html lang="en">
-
+    <!DOCTYPE html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Bukti Pembelian</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+        }
+    
+        #back-wrap {
+            margin: auto;
+            width: 100%;
+            max-width: 500px;
+        }
+    
+        .btn-back {
+            padding: 8px 15px;
+            color: #fff;
+            background: #3498db;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: background 0.3s;
+        }
+    
+        .btn-back:hover {
+            background: #2980b9;
+        }
+    
+        #receipt {
+            background-color: #ffffff;
+            box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.15);
+            border-radius: 10px;
+            max-width: 550px;
+            padding: 20px;
+            margin: auto;
+            margin-top: 30px;
+            margin-bottom: 30px;
+        }
+    
+        h2 {
+            font-size: 1.4rem;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+    
+        p {
+            font-size: 1rem;
+            color: #444;
+            line-height: 1.6;
+        }
+    
+        #top {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+    
+        #top h2 {
+            color: #34495e;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+    
+        table {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+        }
+    
+        th, td {
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+            text-align: left;
+        }
+    
+        th {
+            font-size: 0.95rem;
+            color: #555;
+            font-weight: 600;
+        }
+    
+        .tabletitle h2 {
+            font-size: 1rem;
+            color: #333;
+            font-weight: 600;
+        }
+    
+        .service {
+            font-size: 1rem;
+        }
+    
+        .itemtext {
+            font-size: 0.95rem;
+            color: #333;
+        }
+    
+        .btn-print {
+            color: #3498db;
+            font-size: 0.9rem;
+            text-decoration: none;
+        }
+    
+        .btn-print:hover {
+            color: #2980b9;
+        }
+    
+        #legalcopy {
+            margin-top: 30px;
+            text-align: center;
+        }
+    
+        .legal {
+            font-size: 0.85rem;
+            color: #666;
+        }
+    
+        /* Tambahan gaya untuk garis tepi */
+        .border-top {
+            border-top: 2px solid #ddd;
+            margin-top: 10px;
+        }
+    
+        /* Tambahan gaya untuk total harga */
+        .total-row h2 {
+            font-size: 1.1rem;
+            color: #333;
+            font-weight: bold;
+        }
+    </style>
 </head>
 
 <body>
-    <style>
-        #back-wrap {
-            margin: 30px auto 0 auto;
-            width: 500px;
-            display: flex;
-            justify-content: flex-end;
-        }
-
-        .btn-back {
-            width: fit-content;
-            padding: 8px 15px;
-            color: #fff;
-            background: #666;
-            border-radius: 5px;
-            text-decoration: none;
-        }
-
-        #receipt {
-            box-shadow: 5px 10px 15px rgba(0, 0, 0, 0.5);
-            padding: 20px;
-            margin: 30px auto 0 auto;
-            width: 500px;
-            background: #FFF;
-        }
-
-        h2 {
-            font-size: .9rem;
-        }
-
-        p {
-            font-size: .8rem;
-            color: #666;
-            line-height: 1.2rem;
-        }
-
-        #top {
-            margin-top: 25px;
-        }
-
-        #top .info {
-            text-align: left;
-            margin: 20px 0;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        td {
-            padding: 5px 0 5px 15px;
-            border: 1px solid #EEE;
-        }
-
-        .tabletitle {
-            font-size: 5rem;
-            background: #EEE;
-        }
-
-        .service {
-            border-bottom: 1px solid #EEE;
-        }
-
-        .itemtext {
-            font-size: .7rem;
-        }
-
-        #legalcopy {
-            margin-top: 15px;
-        }
-
-        .btn-print {
-            float: right;
-            color: #333;
-        }
-    </style>
     <div id="receipt">
         <center id="top">
             <div class="info">
-                <h2>
-                    Buku Qya Jaya Jaya Jaya
-                </h2>
+                <h2>Buku Qya Jaya Jaya Jaya</h2>
+                <p>Alamat: Depok <br> Email: JayaQya@gmail.com <br> Phone: 1234-5678-9101</p>
             </div>
         </center>
         <div id="mid">
-            <p>
-                Alamat: Depok <br>
-                Email: JayaQya@gmail.com <br>
-                Phone: 1234-5678-9101 <br>
-            </p>
+            <p>Nama Pembeli: <b>{{ $order['name_customer'] }}</b></p>
         </div>
         <div id="bot">
-            <div id="table">
-                <table>
-                    <tr>
-                        <td class="item">
-                            <h2>Buku</h2>
-                        </td>
-                        <td class="item">
-                            <h2>Total</h2>
-                        </td>
-                        <td class="item">
-                            <h2>Harga</h2>
-                        </td>
-                    </tr>
-                    @foreach ($order['books'] as $books)
-                        <tr class="service">
-                            <td class="tableitem">
-                                <p class="itemtext"> {{ $books['name_book'] }} </p>
-                            </td>
-                            <td class="tableitem">
-                                <p class="itemtext"> {{ $books['qty'] }} </p>
-                            </td>
-                            <td class="tableitem">
-                                <p class="itemtext"> Rp.{{ number_format($books['price'], 0, ',', '.') }} </p>
-                            </td>
-                        </tr>
-                    @endforeach
-                    <tr class="tabletitle">
-                        <td></td>
-                        <td class="rate">
-                            <h2>PPN (10%)</h2>
-                        </td>
-                        @php
-                            $ppn = $order['total_price'] * 0.01;
+            <table>
+                <tr>
+                    <th>Judul Buku</th>
+                    <th>Kuantitas</th>
+                    <th>Harga</th>
+                </tr>
+                @foreach ($order['books'] as $book)
+                <tr class="service">
+                    <td class="tableitem"><p class="itemtext"> {{ $book['name_book'] }} </p></td>
+                    <td class="tableitem"><p class="itemtext"> {{ $book['qty'] }} </p></td>
+                    <td class="tableitem"><p class="itemtext"> Rp. {{ number_format($book['price'], 0, ',', '.') }} </p></td>
+                </tr>
+                @endforeach
+                <tr class="tabletitle">
+                    <td></td>
+                    <td><h2>PPN (10%)</h2></td>
+                    @php
+                        $ppn = $order['total_price'] * 0.1;
                         @endphp
-                        <td class="payment">
-                            <h2>Rp. {{ number_format($ppn, 0, ',', '.') }} </h2>
-                        </td>
-                    </tr>
-                    <tr class="tabletitle">
-                        <td></td>
-                        <td class="rate">
-                            <h2>Total Harga:</h2>
-                        </td>
-                        <td class="payment">
-                            <h2>Rp. {{ number_format($order['total_price'], 0, ',', '.') }} </h2>
-                        </td>
-                    </tr>
-                </table>
-            </div>
+                    <td><h2>Rp. {{ number_format($ppn, 0, ',', '.') }} </h2></td>
+                </tr>
+                <tr class="tabletitle">
+                    <td></td>
+                    <td><h2>Total Harga:</h2></td>
+                    <td><h2>Rp. {{ number_format($order['total_price'], 0 , ',', '.')}} </h2></td>
+                </tr>
+            </table>
             <div id="legalcopy">
-                <p class="legal"><strong>Terima Kasih atas pembelian anda!</strong> Lorem ipsum dolor sit
-                    amet consectetur adipisicing elit. Provident sequi quos quidem praesentium cumque ipsum fugit velit.
-                    Explicabo,
-                    dolor. Unde asperiores quibusdam, necessitatibus aperiam hic voluptatibus ipsa officiis quo itaque?
-                </p>
+                <p class="legal"><strong>Terima Kasih atas pembelian Anda!</strong> Kami senang melayani Anda. Hubungi kami jika ada pertanyaan.</p>
             </div>
         </div>
     </div>
+    {{-- <div id="back-wrap">
+        <a href="{{ route('pelanggan.order.index') }}" class="btn-back">Kembali</a>
+        <a href="{{ route('pelanggan.order.download', $order['id']) }}" class="btn-download">Cetak (.pdf)</a>
+    </div> --}}
 </body>
 
 </html>
-
-

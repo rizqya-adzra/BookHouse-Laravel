@@ -7,6 +7,9 @@ use App\Models\Order;
 use Illuminate\Http\Request;
 use App\Models\Book;
 use illuminate\Support\Facades\Auth;
+use App\Exports\OrdersExport;
+// use Maatwebsite\Excel\Excel;
+use Maatwebsite\Excel\Facades\Excel;
 
 class OrderController extends Controller
 {
@@ -16,7 +19,7 @@ class OrderController extends Controller
     public function index(Request $request)
     {
         // $order = Order::where('name_customer')->simplePaginate(5);
-        $order = Order::all();
+        $order = Order::where('created_at', 'LIKE', '%'.$request->search.'%')->orderBy('created_at', 'DESC')->simplePaginate(5);
         return view('order.index', compact('order'));
         // dd($order);
     }
@@ -37,56 +40,63 @@ class OrderController extends Controller
     {
         $request->validate([
             'name_customer' => 'required',
-            // 'nis' => 'required',
-            // 'rombel' => 'required',
-            'books' => 'required',
             'notes' => 'required',
+            'books' => 'required',
+        ], [
+            'name_customer.required' => 'nama Wajib diisi!',
+            'notes.required' => 'Catatan Wajib diisi!',
+            'books.required' => 'Pembelian wajib diisi!',
         ]);
 
-        $arrayDistinct = array_count_values($request->books);
-        $arrayAssocBooks = [];
+        $countDuplicate = array_count_values($request->books);
+        $arrayFormat = [];
 
-        foreach($arrayDistinct as $id => $count) {
-            $books = Book::where('id', $id)->first();
+        foreach($countDuplicate as $key => $value) {
+            $booksDetail = Book::find($key);
 
-            $subPrice = $books['price'] * $count;
+            if ($booksDetail['stock'] < $value) {
+                $msg = 'Tidak dapat membeli Buku ' . $booksDetail['name'] . ' sisa stok: ' . $booksDetail['stock'];
+                return redirect()->back()->withInput()->with('failed', $msg);
+            }
 
-            $arrayItem = [
-                "id" => $id,
-                "name_book" => $books['name'],
-                "qty" => $count,    
-                "price" => $books['price'],
-                "sub_price" => $subPrice,
+            $booksFormat = [
+                "id" => $key,
+                "name_book" => $booksDetail['name'],
+                "price" => $booksDetail['price'],
+                "qty" => $value,    
+                "sub_price" => $booksDetail['price'] * $value,
             ];
 
-            array_push($arrayAssocBooks, $arrayItem);
+            array_push($arrayFormat, $booksFormat);
         }
 
         $totalPrice = 0;
 
-        foreach($arrayAssocBooks as $item) {
-            $totalPrice += (int)$item['sub_price'];
+        foreach($arrayFormat as $key => $value) {
+            $totalPrice += $value['sub_price'];
         }
 
-        $priceWithPPN = $totalPrice + ($totalPrice * 0.01);
+        $priceWithPPN = $totalPrice + ($totalPrice * 0.1);
 
-        $proses = Order::create([
+        $addOrder = Order::create([
             'user_id' => Auth::user()->id,
+            'books' => $arrayFormat,
             'name_customer' => $request->name_customer,
             'notes' => $request->notes,
-            // 'nis' => $request->nis,
-            // 'rombel' => $request->rombel,
-            'books' => $arrayAssocBooks,
             'total_price' => $priceWithPPN,
         ]);
 
-        if($proses) {
-            $order = Order::where('user_id', Auth::user()->id)->orderBy('created_at', 'DESC')->first();
-            return redirect()->route('pelanggan.order.print', $order['id']);
+        if($addOrder) {
+            foreach($arrayFormat as $key => $value) {
+                $lateStock = Book::find($value['id']);
+                Book::where('id', $value['id'])->update([
+                    'stock' =>($lateStock['stock'] - $value['qty'])
+                ]);
+            }
+          return redirect()->route('pelanggan.order.print', $addOrder['id']);
         } else {
-            return redirect()->back()->with('error', 'Gagal Melakukan Pembelian');
-        }
-
+            return redirect()->back()->with('failed', 'Ada kesalahan dalam membeli obat');
+            }
     }
 
     /**
@@ -129,4 +139,20 @@ class OrderController extends Controller
         $pdf = PDF::loadView('order.downloadpdf', $order);
         return $pdf->download('receipt.pdf');   
     }
+
+    public function data(Request $request)
+    {
+        $orders = Order::with('user')->where('created_at', 'LIKE', '%'.$request->search.'%' )->orderBy('created_at', 'DESC')->simplePaginate(5);
+        return view('order.admin.index', compact('orders'));
+    }
+
+    public function exportExcel()
+    {
+        $file_name = 'data_pembelian'.'.xlsx';
+        return Excel::download(new OrdersExport, $file_name);
+    }
 }
+
+
+
+
